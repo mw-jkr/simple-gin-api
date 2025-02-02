@@ -24,7 +24,7 @@ func (s Server) Shutdown(ctx context.Context) error {
 
 func ProvideServer(cfg *config.Config, uc controller.UserController) *Server {
 	r := gin.Default()
-	r.GET("/user/:id", uc.GetUserById )
+	r.GET("/user/:id", uc.GetUserById)
 
 	port := getPortString(cfg.ServerPort)
 	srv := &http.Server{Addr: port, Handler: r}
