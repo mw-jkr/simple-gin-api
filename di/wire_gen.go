@@ -2,6 +2,7 @@
 
 //go:generate go run -mod=mod github.com/google/wire/cmd/wire
 //go:build !wireinject
+// +build !wireinject
 
 package di
 
@@ -9,6 +10,7 @@ import (
 	"context"
 	"example/test-golang/config"
 	"example/test-golang/controller"
+	"example/test-golang/db"
 	"example/test-golang/http"
 	"example/test-golang/repository"
 	"example/test-golang/service"
@@ -21,12 +23,14 @@ func InitializeApplication(ctx context.Context) (*Application, error) {
 	if err != nil {
 		return nil, err
 	}
-	userRepository := repository.ProvideUserRepository()
+	dbDB := db.ProvideDB(configConfig)
+	userRepository := repository.ProvideUserRepository(dbDB)
 	userService := service.ProvideUserService(userRepository)
 	userController := controller.ProvideUserController(userService)
 	server := http.ProvideServer(configConfig, userController)
 	application := &Application{
 		Srv: server,
+		DB:  dbDB,
 	}
 	return application, nil
 }

@@ -1,26 +1,26 @@
 package service
 
 import (
-	"errors"
+	"context"
 	"example/test-golang/entity"
 	"example/test-golang/repository"
 )
 
 type UserService interface {
-	GetUserById(id int) (*entity.User, error)
+	GetUserById(ctx context.Context, id int) (*entity.User, error)
 }
 
 type userServiceImpl struct {
 	repository.UserRepository
 }
 
-func (u userServiceImpl) GetUserById(id int) (*entity.User, error) {
-	if id == 1 {
-		user := &entity.User{Name: "test"}
-		return user, nil
+func (u userServiceImpl) GetUserById(ctx context.Context, id int) (*entity.User, error) {
+	user, err := u.UserRepository.GetUserById(ctx, id)
+	if err != nil {
+		return nil, err
 	}
 
-	return nil, errors.New("user not found")
+	return user, nil
 }
 
 func NewUserService(ur repository.UserRepository) UserService {

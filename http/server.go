@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 )
 
@@ -24,6 +25,7 @@ func (s Server) Shutdown(ctx context.Context) error {
 
 func ProvideServer(cfg *config.Config, uc controller.UserController) *Server {
 	r := gin.Default()
+	pprof.Register(r)
 	r.GET("/user/:id", uc.GetUserById)
 
 	port := getPortString(cfg.ServerPort)

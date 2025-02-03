@@ -36,8 +36,13 @@ func main() {
 
 	err = app.Srv.Shutdown(ctx)
 	if err != nil {
-		log.Fatal("Server forced to shutdown: ", err)
+		log.Fatal("failed to shutdown server, server forced to shutdown: ", err)
 	}
 
-	log.Println("Server exiting")
+	err = app.DB.Shutdown(ctx)
+	if err != nil {
+		log.Fatal("failed to shutdown db, server forced to shutdown: ", err)
+	}
+
+	log.Println("server exiting")
 }

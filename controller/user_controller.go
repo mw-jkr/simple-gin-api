@@ -24,7 +24,7 @@ func (u *userControllerImpl) GetUserById(ctx *gin.Context) {
 		return
 	}
 
-	user, err := u.UserService.GetUserById(id)
+	user, err := u.UserService.GetUserById(ctx, id)
 	if err != nil {
 		ctx.JSON(http.StatusNotFound, common.BuildErrorResponse(err))
 		return
